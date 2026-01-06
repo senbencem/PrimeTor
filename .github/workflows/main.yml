@@ -7,17 +7,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      # 1. Kodlari cek
+      - uses: actions/checkout@v3
 
-      # 1. Zip dosyasini ac
-      - name: Zip Ac
-        run: unzip proje.zip
-
-      # 2. Gereksiz dosyalari temizle
-      - name: Temizlik
-        run: rm -rf .github
-
-      # 3. Buildozer ile APK yap (Sihirli Kisim)
+      # 2. Buildozer ile APK yap
+      # NOT: Reponuzun ana dizininde 'buildozer.spec' dosyasi olmak ZORUNDADIR.
       - name: Buildozer Action
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
@@ -25,9 +19,9 @@ jobs:
           command: buildozer android debug
           buildozer_version: master
 
-      # 4. APK'yi Yukle
+      # 3. APK'yi Yukle (Artifact v4 kullaniyoruz, daha guncel)
       - name: APK'yi Kaydet
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: PrimeTor-APK
           path: bin/*.apk
