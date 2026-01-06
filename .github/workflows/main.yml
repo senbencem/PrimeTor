@@ -1,0 +1,33 @@
+name: APK Yapici
+on: [push]
+
+jobs:
+  build-android:
+    name: APK Olustur
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # 1. Zip dosyasini ac
+      - name: Zip Ac
+        run: unzip proje.zip
+
+      # 2. Gereksiz dosyalari temizle
+      - name: Temizlik
+        run: rm -rf .github
+
+      # 3. Buildozer ile APK yap (Sihirli Kisim)
+      - name: Buildozer Action
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: master
+
+      # 4. APK'yi Yukle
+      - name: APK'yi Kaydet
+        uses: actions/upload-artifact@v2
+        with:
+          name: PrimeTor-APK
+          path: bin/*.apk
