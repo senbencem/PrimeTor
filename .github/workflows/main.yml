@@ -3,25 +3,25 @@ on: [push]
 
 jobs:
   build-android:
-    name: APK Olustur
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Kodlari cek
       - uses: actions/checkout@v3
 
-      # 2. Buildozer ile APK yap
-      # NOT: Reponuzun ana dizininde 'buildozer.spec' dosyasi olmak ZORUNDADIR.
       - name: Buildozer Action
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
           command: buildozer android debug
           buildozer_version: master
+          # DİKKAT: Dosyalariniz 'oyun' diye bir klasordeyse asagiya oyun yazin.
+          # Dosyalar ana dizindeyse bu satir gerekmez.
+          workdir: dosya_klasorunun_adi 
 
-      # 3. APK'yi Yukle (Artifact v4 kullaniyoruz, daha guncel)
       - name: APK'yi Kaydet
         uses: actions/upload-artifact@v4
         with:
           name: PrimeTor-APK
-          path: bin/*.apk
+          path: |
+             bin/*.apk
+             */bin/*.apk
